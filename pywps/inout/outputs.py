@@ -10,6 +10,7 @@ import lxml.etree as etree
 import os
 from pywps.app.Common import Metadata
 from pywps.exceptions import InvalidParameterValue
+from pywps import configuration as config
 from pywps.inout import basic
 from pywps.inout.formats import Format
 from pywps.inout.storage import FileStorage
@@ -191,7 +192,9 @@ class ComplexOutput(basic.ComplexOutput):
         if self.prop == 'url':
             data["href"] = self.url
         elif self.prop is not None:
-            self.storage = FileStorage()
+            storage = config.get_config_value('server', 'storage')
+            storage_class = config.resolve_storage(storage)
+            self.storage = storage_class()
             data["href"] = self.get_url()
 
         return data

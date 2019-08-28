@@ -44,6 +44,7 @@ class Job(object):
         obj = {
             'process': self.process.json,
             'wps_request': self.wps_request.json,
+            'user_id': self.wps_request.http_request.environ['user_id']
         }
 
         return json.dumps(obj, allow_nan=False)
