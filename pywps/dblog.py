@@ -45,7 +45,7 @@ class ProcessInstance(Base):
     time_start = Column(DateTime(), nullable=False)
     time_end = Column(DateTime(), nullable=True)
     identifier = Column(VARCHAR(255), nullable=True)
-    message = Column(String, nullable=True)
+    message = Column(String(255), nullable=True)
     percent_done = Column(Float, nullable=True)
     status = Column(Integer, nullable=True)
 
