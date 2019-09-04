@@ -42,10 +42,16 @@ class WPSRequest(object):
         self.WPS = None
         self.OWS = None
         self.xpath_ns = None
+        self.userid = None
+        self.oidc_claims = self.http_request.environ.get('oidc.claims', {})
 
         if self.http_request:
             request_parser = self._get_request_parser_method(http_request.method)
             request_parser()
+
+            # Get the userid for authorization purpose
+            if self.http_request.environ['userid']:
+                self.userid = self.http_request.environ['userid']
 
     def _get_request_parser_method(self, method):
 
@@ -332,7 +338,9 @@ class WPSRequest(object):
             'lineage': self.lineage,
             'inputs': dict((i, [inpt.json for inpt in self.inputs[i]]) for i in self.inputs),
             'outputs': self.outputs,
-            'raw': self.raw
+            'raw': self.raw,
+            'userid': self.userid,
+            'oidc_claims': self.oidc_claims
         }
 
         return json.dumps(obj, allow_nan=False, cls=ExtendedJSONEncoder)
@@ -354,6 +362,8 @@ class WPSRequest(object):
         self.lineage = value['lineage']
         self.outputs = value['outputs']
         self.raw = value['raw']
+        self.userid = value['userid']
+        self.oidc_claims = value['oidc_claims']
         self.inputs = {}
 
         for identifier in value['inputs']:
