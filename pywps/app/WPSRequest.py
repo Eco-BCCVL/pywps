@@ -42,16 +42,12 @@ class WPSRequest(object):
         self.WPS = None
         self.OWS = None
         self.xpath_ns = None
-        self.userid = None
+        self.userid = self.http_request.environ.get('userid')
         self.oidc_claims = self.http_request.environ.get('oidc.claims', {})
 
         if self.http_request:
             request_parser = self._get_request_parser_method(http_request.method)
             request_parser()
-
-            # Get the userid for authorization purpose
-            if self.http_request.environ['userid']:
-                self.userid = self.http_request.environ['userid']
 
     def _get_request_parser_method(self, method):
 
