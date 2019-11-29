@@ -174,6 +174,9 @@ class ExecuteResponse(WPSResponse):
         elif self.status == WPS_STATUS.FAILED:
             # check if process failed and display fail message
             data["status"] = self._process_failed()
+
+            # Process outputs XML
+            data["outputs"] = [self.outputs[o].json for o in self.outputs]
         elif self.status == WPS_STATUS.PAUSED:
             # TODO: handle paused status
             data["status"] = self._process_paused()
