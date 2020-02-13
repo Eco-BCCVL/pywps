@@ -42,10 +42,12 @@ class WPSRequest(object):
         self.WPS = None
         self.OWS = None
         self.xpath_ns = None
-        self.userid = self.http_request.environ.get('userid')
-        self.oidc_claims = self.http_request.environ.get('oidc.claims', {})
+        self.userid = None
+        self.oidc_claims = None
 
         if self.http_request:
+            self.userid = self.http_request.environ.get('userid')
+            self.oidc_claims = self.http_request.environ.get('oidc.claims', {})
             request_parser = self._get_request_parser_method(http_request.method)
             request_parser()
 
